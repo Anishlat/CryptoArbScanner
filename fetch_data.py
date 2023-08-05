@@ -1,4 +1,5 @@
 import trades
+import asyncio
 
 async def main():
     await trades.fetch_data_periodically()

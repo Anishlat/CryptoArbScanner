@@ -25,9 +25,6 @@ async def fetch_data_periodically():
         # Wait for a specified interval before fetching again
         await asyncio.sleep(220) # Adjust the interval as needed
 
-# Start the asynchronous function
-asyncio.create_task(fetch_data_periodically())
-
 # Function to calculate percent difference between two numbers
 def get_change(a, b):
     if a == b:

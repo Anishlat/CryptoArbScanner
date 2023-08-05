@@ -98,7 +98,5 @@ def update_text(n):
 
 # Main entry point for the app
 if __name__ == "__main__":
-    # Start the asynchronous function (this line should be in trades.py)
-    asyncio.run(trades.fetch_data_periodically())
     # Start the Dash app
     app.run_server(debug=False)
