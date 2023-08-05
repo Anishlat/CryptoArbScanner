@@ -19,7 +19,8 @@ async def fetch_data_periodically():
     while True:
         # Fetch the coin data
         coin_data = await get_coin_data(15)
-        print("Fetched coin data:", coin_data) # Debugging output
+        # Print a summary of the fetched data
+        print(f"Fetched data for {len(coin_data)} coins")
         # Store the result in the global variable
         global coin_data_global
         coin_data_global = coin_data
