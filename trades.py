@@ -8,10 +8,6 @@ import aiohttp
 import sys
 import asyncio
 
-#Checks code is running on Windows and sets the event loop policy to WindowsSelectorEventLoopPolicy to avoid the proactor event loop issue
-if sys.platform == 'win32':
-    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-
 # Initialize CoinGecko API
 cg = CoinGeckoAPI()
 

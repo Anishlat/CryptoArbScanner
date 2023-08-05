@@ -4,6 +4,12 @@ from dash import html, dcc, dash_table, dash
 from dash.dependencies import Input, Output
 import pandas as pd
 import trades
+import asyncio
+import sys
+
+if sys.platform == 'win32':
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
 
 # External stylesheets for styling the app
 external_stylesheets = [
