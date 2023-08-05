@@ -19,11 +19,13 @@ async def fetch_data_periodically():
     while True:
         # Fetch the coin data
         coin_data = await get_coin_data(15)
+        print("Fetched coin data:", coin_data) # Debugging output
         # Store the result in the global variable
         global coin_data_global
         coin_data_global = coin_data
         # Wait for a specified interval before fetching again
         await asyncio.sleep(220) # Adjust the interval as needed
+
 
 # Function to calculate percent difference between two numbers
 def get_change(a, b):
