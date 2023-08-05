@@ -15,6 +15,23 @@ if sys.platform == 'win32':
 # Initialize CoinGecko API
 cg = CoinGeckoAPI()
 
+# Global variable to store the coin data
+coin_data_global = {}
+
+# Handle the asynchronous fetching of coin data and store the results in a global variable.
+async def fetch_data_periodically():
+    while True:
+        # Fetch the coin data
+        coin_data = await get_coin_data(15)
+        # Store the result in the global variable
+        global coin_data_global
+        coin_data_global = coin_data
+        # Wait for a specified interval before fetching again
+        await asyncio.sleep(220) # Adjust the interval as needed
+
+# Start the asynchronous function
+asyncio.create_task(fetch_data_periodically())
+
 # Function to calculate percent difference between two numbers
 def get_change(a, b):
     if a == b:
@@ -157,6 +174,7 @@ def create_sorted_dataframe(data, sort_key):
     return df
 
 # Test code (uncomment to run)
+'''
 async def main():
     coin_data = await get_coin_data(5)
     possible_trades = get_trades(coin_data)
@@ -165,3 +183,4 @@ async def main():
     print(sorted_trades_df)
 
 asyncio.run(main())
+'''
