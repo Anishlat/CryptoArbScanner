@@ -1,0 +1,41 @@
+CryptoArbScanner is a cryptocurrency arbitrage scanner that analyzes the top cryptocurrencies via CoinGecko and compares them on different exchanges. It identifies possible arbitrage opportunities by calculating the percentage difference between the buying and selling prices on various exchanges.
+
+Features
+Centralized Exchange (CEX) Scanning: Scans centralized exchanges for potential arbitrage opportunities.
+Decentralized Exchange (DEX) Scanning: Code for scanning decentralized exchanges is broken we trying to fix lol
+Real-time Updates: The scanner updates the data every 2 minutes to provide the latest arbitrage opportunities.
+Web Interface: A web interface built with Dash to display the possible trades in a user-friendly manner.
+
+Installation
+Clone the repository and install the required dependencies using the following commands:
+- git clone https://github.com/Anishlat/CryptoArbScanner.git
+- cd CryptoArbScanner
+- pip install -r requirements.txt
+
+
+Usage
+
+Run the application using the following command:
+- python app.py
+
+The application will start, and you can access the web interface at localhost.
+
+How It Works
+Arbitrage Calculation
+The application calculates the profit from potential trades by comparing the prices on different exchanges. It considers only exchanges with high trust scores and targets USD or USDT as the trading pair.
+
+Data Fetching
+The application fetches coin data asynchronously using the CoinGecko API. It retrieves the ticker data for the top coins and calculates the possible trades based on the price differences.
+
+Displaying Trades
+The possible trades are displayed in a table on the web interface, showing the coin symbol, percentage difference, high exchange (buy), and low exchange (sell).
+
+Dependencies
+dash: 2.3.0
+pandas: 1.4.1
+gunicorn: 20.1.0
+pycoingecko: 2.2.0
+aiohttp: 3.8.5
+
+License
+Please refer to the License.txt file in the repository for licensing information.
