@@ -3,6 +3,14 @@ from time import sleep
 from pycoingecko import CoinGeckoAPI
 import pandas as pd
 import requests
+import asyncio
+import aiohttp
+import sys
+import asyncio
+
+#Checks code is running on Windows and sets the event loop policy to WindowsSelectorEventLoopPolicy to avoid the proactor event loop issue
+if sys.platform == 'win32':
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
 # Initialize CoinGecko API
 cg = CoinGeckoAPI()
@@ -81,19 +89,23 @@ def get_profit(coin_data):
 # ------------------------------------------------------------------------------------------------------------
 
 # Function to return an array of top coins from CoinGecko
-def get_coin_data(numCoins):
+# Asynchronous function to fetch coin data
+async def fetch_coin_data(session, coin_id):
+    url = f"https://api.coingecko.com/api/v3/coins/{coin_id}/tickers"
+    async with session.get(url) as response:
+        return await response.json()
+
+# Asynchronous function to get coin data for multiple coins
+async def get_coin_data(numCoins):
     coin_tickers = {}
-
-    # Get list of top 100 coins by market cap
     coin_list = cg.get_coins_markets(vs_currency='usd', order='market_cap_desc')
-
-    # Add first 50 to dictionary (limited by CoinGecko API rate limits)
-    for coin in coin_list[:numCoins]:
-        id = coin['id']
-        sleep(12)  # Introduce a 12-second delay between requests to avoid rate limiting
-        coin_tickers[id] = cg.get_coin_ticker_by_id(id=id)
-
+    async with aiohttp.ClientSession() as session:
+        tasks = [fetch_coin_data(session, coin['id']) for coin in coin_list[:numCoins]]
+        results = await asyncio.gather(*tasks)
+        for coin, result in zip(coin_list[:numCoins], results):
+            coin_tickers[coin['id']] = result
     return coin_tickers
+
 
 # Function to get possible trades based on coin data
 def get_trades(coin_data):
@@ -145,12 +157,11 @@ def create_sorted_dataframe(data, sort_key):
     return df
 
 # Test code (uncomment to run)
-'''
-coin_data = get_coin_data(50)
-possible_trades = get_trades(coin_data)
-suggest_trade(possible_trades)
+async def main():
+    coin_data = await get_coin_data(5)
+    possible_trades = get_trades(coin_data)
+    suggest_trade(possible_trades)
+    sorted_trades_df = create_sorted_dataframe(possible_trades, 'profit')
+    print(sorted_trades_df)
 
-sorted_trades_df = create_sorted_dataframe(possible_trades, 'profit')
-
-print(sorted_trades_df)
-'''
+asyncio.run(main())
