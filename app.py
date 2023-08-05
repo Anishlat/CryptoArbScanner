@@ -67,19 +67,15 @@ app.layout = html.Div(
     ])
 )
 
-# Callback to update possible trades in the table
-@app.callback(
-    Output(component_id='trades-table', component_property='data'),
-    Input('interval-component', 'n_intervals')
-)
+from trades import coin_data_global
+
 def display_trades(n):
-    # Fetch data for X amount of cryptocurrencies
-    coin_data = trades.get_coin_data(15)
+    # Access the global variable from trades.py
+    coin_data = coin_data_global
     # Get possible trades based on the coin data
     possible_trades = trades.get_trades(coin_data)
     # Create a sorted DataFrame based on profit
     df = trades.create_sorted_dataframe(possible_trades, 'profit')
-
     return df.to_dict('records')
 
 # Callback to update the last updated time text
@@ -96,4 +92,7 @@ def update_text(n):
 
 # Main entry point for the app
 if __name__ == "__main__":
+    # Start the asynchronous function (this line should be in trades.py)
+    asyncio.run(trades.fetch_data_periodically())
+    # Start the Dash app
     app.run_server(debug=False)
