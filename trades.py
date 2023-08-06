@@ -25,7 +25,7 @@ async def fetch_data_periodically():
         global coin_data_global
         coin_data_global = coin_data
         # Wait for a specified interval before fetching again
-        await asyncio.sleep(20) # Fetch data every X seconds
+        await asyncio.sleep(300) # Fetch data every X seconds
 
 
 # Function to calculate percent difference between two numbers
