@@ -25,7 +25,7 @@ async def fetch_data_periodically():
         global coin_data_global
         coin_data_global = coin_data
         # Wait for a specified interval before fetching again
-        await asyncio.sleep(220) # Adjust the interval as needed
+        await asyncio.sleep(20) # Fetch data every X seconds
 
 
 # Function to calculate percent difference between two numbers
@@ -136,8 +136,8 @@ def get_trades(coin_data):
         }
 
     # Tether provides lots of false negatives, so remove it
-    del possible_trades['tether']
-
+    if 'tether' in possible_trades:
+        del possible_trades['tether']
     return possible_trades
 
 # Function to find the highest profit trade from possible trades

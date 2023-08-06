@@ -67,7 +67,7 @@ app.layout = html.Div(
         # Interval component to trigger periodic updates
         dcc.Interval(
             id='interval-component',
-            interval=220 * 1000,  # in milliseconds --> MUST stay above 1 minute to prevent rate limiting
+            interval= 220 * 1000,  # in milliseconds --> MUST stay above 1 minute to prevent rate limiting
             n_intervals=0
         )
     ])
@@ -76,12 +76,11 @@ app.layout = html.Div(
 from trades import coin_data_global
 
 def display_trades(n):
-    # Access the global variable from trades.py
-    coin_data = coin_data_global
-    # Get possible trades based on the coin data
-    possible_trades = trades.get_trades(coin_data)
-    # Create a sorted DataFrame based on profit
-    df = trades.create_sorted_dataframe(possible_trades, 'profit')
+    coin_data = trades.coin_data_global # Access the global variable from trades.py
+    print("Coin data:", coin_data) # Debugging output
+    print("Callback triggered with input:", n)
+    possible_trades = trades.get_trades(coin_data) # Get possible trades based on the coin data
+    df = trades.create_sorted_dataframe(possible_trades, 'profit') # Create a sorted DataFrame based on profit
     return df.to_dict('records')
 
 # Callback to update the last updated time text
@@ -95,6 +94,15 @@ def update_text(n):
     current_time_str = current_time.strftime("%m/%d/%Y %H:%M:%S")
 
     return html.Span('Last updated at {ftime}.'.format(ftime=current_time_str))
+
+# Callback to update the trades table
+@app.callback(
+    Output(component_id='trades-table', component_property='data'),
+    Input('interval-component', 'n_intervals')
+)
+def update_trades_table(n):
+    return display_trades(n)
+
 
 # Main entry point for the app
 if __name__ == "__main__":
