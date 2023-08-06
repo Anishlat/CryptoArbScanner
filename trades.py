@@ -15,20 +15,30 @@ cg = CoinGeckoAPI()
 coin_data_global = {}
 
 # Handle the asynchronous fetching of coin data and store the results in a global variable.
+# trades.py
+
+# trades.py
+
 async def fetch_data_periodically():
     while True:
         # Fetch the coin data
         coin_data = await get_coin_data(25)
         # Print a summary of the fetched data
         print(f"Fetched data for {len(coin_data)} coins")
-        print(coin_data)  # Print the actual data for debugging
+        
+        # Print a sample of the data (first few items)
+        sample_data = {k: coin_data[k] for k in list(coin_data)[:3]}  # Adjust the number as needed
+        print(json.dumps(sample_data, indent=4))  # Print the sample data for debugging
+        
         # Store the result in the global variable
         global coin_data_global
         coin_data_global = coin_data
-        print("Updated global coin data:", coin_data_global)
+        print("Updated global coin data (summary):", len(coin_data_global), "coins fetched.")
         
         # Wait for a specified interval before fetching again
         await asyncio.sleep(300)  # Fetch data every 5 minutes
+
+
 
 
 
@@ -170,8 +180,10 @@ def create_sorted_dataframe(data, sort_key='% Difference'):
     df = pd.DataFrame(data).T
     print("DataFrame before sorting:", df.head())  # Print the first few rows
     df.fillna(0, inplace=True)
-    df.sort_values(by=sort_key, ascending=False, inplace=True)
+    if not df.empty and sort_key in df.columns:
+        df.sort_values(by=sort_key, ascending=False, inplace=True)
     return df
+
 
 
 # Test code (uncomment to run)
