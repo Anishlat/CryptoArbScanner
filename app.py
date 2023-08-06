@@ -76,12 +76,14 @@ app.layout = html.Div(
 from trades import coin_data_global
 
 def display_trades(n):
-    coin_data = trades.coin_data_global # Access the global variable from trades.py
-    print("Coin data:", coin_data) # Debugging output
+    coin_data = trades.coin_data_global  # Access the global variable from trades.py
+    print("Coin data:", coin_data)  # Debugging output
     print("Callback triggered with input:", n)
     possible_trades = trades.get_trades(coin_data) # Get possible trades based on the coin data
+    print("Data passed to create_sorted_dataframe:", possible_trades) # Add this line
     df = trades.create_sorted_dataframe(possible_trades, 'profit') # Create a sorted DataFrame based on profit
     return df.to_dict('records')
+
 
 # Callback to update the last updated time text
 @app.callback(

@@ -21,11 +21,15 @@ async def fetch_data_periodically():
         coin_data = await get_coin_data(25)
         # Print a summary of the fetched data
         print(f"Fetched data for {len(coin_data)} coins")
+        print(coin_data)  # Print the actual data for debugging
         # Store the result in the global variable
         global coin_data_global
         coin_data_global = coin_data
+        print("Updated global coin data:", coin_data_global)
+        
         # Wait for a specified interval before fetching again
-        await asyncio.sleep(300) # Fetch data every X seconds
+        await asyncio.sleep(300)  # Fetch data every 5 minutes
+
 
 
 # Function to calculate percent difference between two numbers
@@ -162,12 +166,13 @@ def suggest_trade(possible_trades):
     print("buy " + max_profit_ticker + " on " + max_profit_lowExchange + " and sell on " + max_profit_highExchange)
 
 # Function to create and sort a DataFrame with a key from a dictionary
-def create_sorted_dataframe(data, sort_key):
+def create_sorted_dataframe(data, sort_key='% Difference'):
     df = pd.DataFrame(data).T
+    print("DataFrame before sorting:", df.head())  # Print the first few rows
     df.fillna(0, inplace=True)
     df.sort_values(by=sort_key, ascending=False, inplace=True)
-
     return df
+
 
 # Test code (uncomment to run)
 '''
